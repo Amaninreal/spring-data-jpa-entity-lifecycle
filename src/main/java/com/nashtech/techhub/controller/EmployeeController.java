@@ -2,11 +2,8 @@ package com.nashtech.techhub.controller;
 
 import com.nashtech.techhub.dto.EmployeeRequest;
 import com.nashtech.techhub.dto.EmployeeResponse;
-import com.nashtech.techhub.entity.Employee;
 import com.nashtech.techhub.services.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
