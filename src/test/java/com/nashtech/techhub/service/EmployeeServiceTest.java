@@ -21,6 +21,11 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for {@link EmployeeServiceImpl} using Unit 5 and Mockito.
+ * This test suite verifies the behavior of the service layer, ensuring
+ * that Employee entities are handled correctly according to business logic.
+ */
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceTest {
 
@@ -32,6 +37,9 @@ class EmployeeServiceTest {
 
     private Employee employee;
 
+    /**
+     * Initializes a sample Employee entity before each test.
+     */
     @BeforeEach
     void setup() {
         employee = new Employee();
@@ -42,6 +50,10 @@ class EmployeeServiceTest {
         employee.setUpdatedTime(LocalDateTime.now());
     }
 
+    /**
+     * Test case for fetching all active employees.
+     * Verifies that the repository is queried and the correct response is returned.
+     */
     @Test
     void testGetAllActiveEmployees() {
         when(employeeRepository.findAllActive()).thenReturn(List.of(employee));
@@ -49,10 +61,14 @@ class EmployeeServiceTest {
         List<EmployeeResponse> responses = employeeService.getAllActiveEmployees();
 
         assertEquals(1, responses.size());
-        assertEquals("Aman", responses.get(0).getName());
+        assertEquals("Aman", responses.getFirst().getName());
         verify(employeeRepository, times(1)).findAllActive();
     }
 
+    /**
+     * Test case for creating a new employee.
+     * Ensures the repository's save method is called and the response is mapped properly.
+     */
     @Test
     void testCreateEmployee() {
         EmployeeRequest request = new EmployeeRequest();
@@ -73,6 +89,10 @@ class EmployeeServiceTest {
         verify(employeeRepository).save(any(Employee.class));
     }
 
+    /**
+     * Test case for updating an existing employee.
+     * Ensures existing employee is found, updated, and saved correctly.
+     */
     @Test
     void testUpdateEmployee() {
         EmployeeRequest request = new EmployeeRequest();
@@ -89,6 +109,10 @@ class EmployeeServiceTest {
         verify(employeeRepository).save(employee);
     }
 
+    /**
+     * Test case for updating an employee that does not exist.
+     * Expects EmployeeNotFoundException to be thrown.
+     */
     @Test
     void testUpdateEmployee_NotFound() {
         when(employeeRepository.findById(999L)).thenReturn(Optional.empty());
@@ -101,6 +125,10 @@ class EmployeeServiceTest {
                 employeeService.updateEmployee(999L, request));
     }
 
+    /**
+     * Test case for soft deleting an existing employee.
+     * Verifies that the 'deleted' flag and timestamp are set.
+     */
     @Test
     void testSoftDeleteEmployee() {
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
@@ -115,6 +143,10 @@ class EmployeeServiceTest {
         assertNotNull(softDeleted.getDeletedTime());
     }
 
+    /**
+     * Test case for soft deleting a non-existing employee.
+     * Expects EmployeeNotFoundException to be thrown.
+     */
     @Test
     void testSoftDeleteEmployee_NotFound() {
         when(employeeRepository.findById(999L)).thenReturn(Optional.empty());
